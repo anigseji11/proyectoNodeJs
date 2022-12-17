@@ -69,6 +69,6 @@ const productManager = new ProductManager()
 productManager.addProduct('titulo', 'Descripcion', 200, '/ruta', 343434, 1000)
 productManager.addProduct('titulo2', 'Descripcion2', 500, '/ruta', 343435, 3000)
 productManager.getProducts()
-productManager.getProductsById(3)
+productManager.getProductsById(0)
 
 
