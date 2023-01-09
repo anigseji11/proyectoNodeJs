@@ -123,35 +123,37 @@ class ProductManager {
     }
 }
 
+module.exports = ProductManager
+
+// const ejecucion = async () => {
+//     const productManager = new ProductManager("./data.json")
+//     await productManager.inicializador();
+
+//     let prodcuts = await productManager.getProducts();
 
 
-const ejecucion = async () => {
-    const productManager = new ProductManager("./data.json")
-    await productManager.inicializador();
+//     productManager.addProduct('titulo', 'Descripcion', 200, '/ruta', 343434, 1000)
+//     productManager.addProduct('titulo2', 'Descripcion2', 500, '/ruta', 343435, 3000)
+//     productManager.addProduct('titulo3', 'Descripcion3', 500, '/ruta', 343436, 3000)
+//     productManager.addProduct('titulo4', 'Descripcion4', 500, '/ruta', 343437, 3000)
 
-    let prodcuts = await productManager.getProducts();
-    console.log(prodcuts)
+//     const productUpdate = {
+//         title: "titulo4444",
+//         description: "Descripcio44444n",
+//         price: 200,
+//         thumbnail: "/ruta",
+//         code: 343434,
+//         stock:1000
+//     }
 
-    productManager.addProduct('titulo', 'Descripcion', 200, '/ruta', 343434, 1000)
-    productManager.addProduct('titulo2', 'Descripcion2', 500, '/ruta', 343435, 3000)
+// //     productos = await productManager.getProducts()
 
-    const productUpdate = {
-        title: "titulo4444",
-        description: "Descripcio44444n",
-        price: 200,
-        thumbnail: "/ruta",
-        code: 343434,
-        stock:1000
-    }
-
-    productos = await productManager.getProducts()
-
-await productManager.updateProducts(1, productUpdate )
-await productManager.deleteProduct(1 )
-
-    // console.log(productManager.getProductsById(1));
-}
+// // await productManager.updateProducts(1, productUpdate )
 
 
-ejecucion()
+//     // console.log(productManager.getProductsById(1));
+// }
+
+
+// ejecucion()
 
