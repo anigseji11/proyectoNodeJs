@@ -1,11 +1,25 @@
 const fs = require('fs');
 
-const writeFile = (path, products) => fs.promises.writeFile(path, JSON.stringify({products}));
+const writeFile = (path, products) => fs.promises.writeFile(path, JSON.stringify({products : products}));
 
 const readFile = async (path) => {
     const asyncGetProducts = await fs.promises.readFile(path);
     const parseResult = JSON.parse(asyncGetProducts);
     return parseResult;
+}
+
+const inicializador = async (path) => {
+    const existFile = fs.existsSync(path);
+
+    if(existFile){
+            console.log('Archivo ya existe');  
+            const {products} = await readFile(path)
+            
+            this.products = {products}
+    }else{
+            await writeFile(path, this.products);
+            console.log('El archivo se creo correctamente');  
+    }
 }
 
 class Productos {
@@ -15,14 +29,18 @@ class Productos {
         price,
         thumbnail,
         code,
-        stock
+        stock,
+        status,
+        category
     ) {
         this.title = title,
             this.description = description,
             this.price = price,
             this.thumbnail = thumbnail,
             this.code = code,
-            this.stock = stock
+            this.stock = stock,
+            this.status = status,
+            this.category = category
     }
 }
 
@@ -30,42 +48,38 @@ class ProductManager {
     constructor(path) {
         this.products = [];
         this.path = path;
+        inicializador(path)
     }
 
-    inicializador = async () => {
-        const existFile = fs.existsSync(this.path);
+  
 
-        if(existFile){
-                console.log('Archivo ya existe');  
-                const {products} = await readFile(this.path)
-                this.products = products
-        }else{
-                await writeFile(this.path, this.products);
-                console.log('El archivo se creo correctamente');  
-        }
-    }
+    addProduct = async (title, description, price, thumbnail, code, stock, status = true, category) => {
 
-    addProduct = async (title, description, price, thumbnail, code, stock) => {
-        
-        if(title && description && price && thumbnail && code && stock){
-            var exist = this.products.find(
+        const  {products} = await readFile(this.path)
+
+        if(title && description && price && code && stock && status && category){
+           
+            var exist = products.find(
                 (producto) => producto.title === title || producto.code === code);
-            
+                console.log(exist)
 
             if (exist) {
                 console.log('EL PRODUCTO YA EXISTE')
+                return('EL PRODUCTO YA EXISTE')
             } else {
-                this.products.push({
-                    id: this.products.length + 1,
-                    title, description, price, thumbnail, code, stock
+                products.push({
+                    id: products.length + 1,
+                    title, description, price, thumbnail, code, stock, status, category
                 }
                 );
 
-                await writeFile(this.path, this.products);
+                await writeFile(this.path, products);
                 console.log('EL PRODUCTO FUE INGRESADO EXITOSAMENTE')
+                return 'EL PRODUCTO FUE INGRESADO EXITOSAMENTE'
             }
         }else{
             console.log('FALTO INGRESAR UNO DE LOS VALORES')
+            return('FALTO INGRESAR UNO DE LOS VALORES')
         }
 
     }
@@ -75,50 +89,52 @@ class ProductManager {
             return fileData;
     }
 
-    getProductsById = (id) => {
-        var findProduct = this.products.find(
-            (producto) => producto.id === id
-            );
+    getProductsById = async (id) => {
+        const { products } = await readFile(this.path)
+         const Product = products[id];
 
-        if(findProduct){
-            return findProduct;
+        if(Product){
+            return Product;
         }else{
             console.log('Producto NO existe') 
         }
     }
 
     updateProducts = async (id, newProduct) => {
-        var findIndexProduct = this.products.findIndex(
+
+        const  {products} = await readFile(this.path)
+        var findIndexProduct = products.findIndex(
             (producto) => producto.id === id
             );
 
             if(findIndexProduct != -1){
-                const id = this.products[findIndexProduct].id
+                const id = products[findIndexProduct].id
 
-                this.products[findIndexProduct] = {
+                products[findIndexProduct] = {
                     id,
                     ...newProduct
                 }
-                await writeFile(this.path, this.products);
-                console.log('Producto modificado exitosamente');
+                await writeFile(this.path, products);
+                return('Producto modificado exitosamente');
 
             }else{
-                console.log('Producto NO existe') 
+                return('Producto NO existe') 
             }
     }
 
     deleteProduct = async(id) => {
-        var findIndexProduct = this.products.findIndex(
+        const  {products} = await readFile(this.path)
+        var findIndexProduct = products.findIndex(
             (producto) => producto.id === id
             );
-
+            console.log(findIndexProduct)
             if(findIndexProduct != -1){
-               const newProducts = this.products.filter(product => product.id != id);
+               const newProducts = products.filter(product => product.id != id);
                await writeFile(this.path, newProducts);
-                console.log('Producto eliminado');
+                return('Producto eliminado');
 
             }else{
-                console.log('Producto NO existe') 
+                return('Producto NO existe') 
             }
     }
 }
