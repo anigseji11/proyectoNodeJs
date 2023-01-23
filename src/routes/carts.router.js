@@ -3,8 +3,7 @@ const { Router } = require('express');
 const router = Router();
 const cartsManager = require('../utils/cartsManager');
 
-const ProductManager = require('../productManager')
-const productManager = new ProductManager(__dirname + '/../assets/product.json')
+const productManager = require('../productManager')
 
 router.post('/', async (req, res) => {
     

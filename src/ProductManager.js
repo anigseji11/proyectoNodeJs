@@ -1,10 +1,13 @@
 const fs = require('fs');
+//const {emmitDeleteproduct} = require('./utils/socket.io.js');
 
 const writeFile = (path, products) => fs.promises.writeFile(path, JSON.stringify({products : products}));
 
 const readFile = async (path) => {
     const asyncGetProducts = await fs.promises.readFile(path);
+
     const parseResult = JSON.parse(asyncGetProducts);
+    
     return parseResult;
 }
 
@@ -55,17 +58,15 @@ class ProductManager {
 
     addProduct = async (title, description, price, thumbnail, code, stock, status = true, category) => {
 
-        const  {products} = await readFile(this.path)
+        const {products} = await readFile(this.path)
 
         if(title && description && price && code && stock && status && category){
-           
             var exist = products.find(
                 (producto) => producto.title === title || producto.code === code);
-                console.log(exist)
 
             if (exist) {
                 console.log('EL PRODUCTO YA EXISTE')
-                return('EL PRODUCTO YA EXISTE')
+                return(0)
             } else {
                 products.push({
                     id: products.length + 1,
@@ -75,7 +76,7 @@ class ProductManager {
 
                 await writeFile(this.path, products);
                 console.log('EL PRODUCTO FUE INGRESADO EXITOSAMENTE')
-                return 'EL PRODUCTO FUE INGRESADO EXITOSAMENTE'
+                return (products.length + 1);
             }
         }else{
             console.log('FALTO INGRESAR UNO DE LOS VALORES')
@@ -87,6 +88,7 @@ class ProductManager {
     getProducts = async () => {
             const fileData = await readFile(this.path);
             return fileData;
+            
     }
 
     getProductsById = async (id) => {
@@ -124,22 +126,21 @@ class ProductManager {
 
     deleteProduct = async(id) => {
         const  {products} = await readFile(this.path)
-        var findIndexProduct = products.findIndex(
-            (producto) => producto.id === id
-            );
-            console.log(findIndexProduct)
+        var findIndexProduct = products.findIndex((producto) => producto.id === id);
+            
             if(findIndexProduct != -1){
-               const newProducts = products.filter(product => product.id != id);
+               const newProducts = products.filter((product) => product.id != id);
                await writeFile(this.path, newProducts);
-                return('Producto eliminado');
-
+               emmitDeleteproduct(id);
+            return(true);
+  
             }else{
-                return('Producto NO existe') 
+                return(false) 
             }
     }
 }
-
-module.exports = ProductManager
+const Product = new ProductManager(__dirname + '/assets/product.json');
+module.exports = Product;
 
 // const ejecucion = async () => {
 //     const productManager = new ProductManager("./data.json")

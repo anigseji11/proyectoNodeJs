@@ -1,9 +1,10 @@
 const { Router } = require('express');
 
+const {emmitDeleteproduct, emmitAddproduct, emmitUpdateproduct} = require('../utils/socket.io');
+
 const router = Router();
 
-const ProductManager = require('../productManager')
-const productManager = new ProductManager(__dirname + '/../assets/product.json')
+const productManager = require('../productManager')
 
 router.get("/", async (req, res) => {
 
@@ -38,18 +39,33 @@ router.get('/:pid', async (req, res) => {
 router.post('/', async (req, res) => {
 
     let producto = req.body;
-    const resp = await productManager.addProduct(producto.title, producto.description, producto.price, producto.thumbnail, producto.code, producto.stock, producto.status, producto.category);
-
-    res.json({
-        msg: resp
-    })
+    try {
+        const resp = await productManager.addProduct(producto.title, producto.description, producto.price, producto.thumbnail, producto.code, producto.stock, producto.status, producto.category);
+        console.log(resp)
+        if(resp !== 0){
+            emmitAddproduct(resp, producto);
+            res.json({
+                msg: 'Creado Exitosamente'
+            })
+        }else{
+            res.json({
+                msg: 'Producto ya existe'
+            })
+        }
+        
+    } catch (error) {
+        res.json({
+            msg: 'Error al crear el producto'
+        })
+    }
+   
 
 })
 
 router.put('/', async (req, res) => {
     let producto = req.body;
     const resp = await productManager.updateProducts(producto.id, producto);
-
+    emmitUpdateproduct(producto);
     res.json({
         msg: resp
     })
@@ -59,11 +75,13 @@ router.delete('/:pid',async (req, res) => {
     const id = parseInt(req.params.pid)
 
     let producto = await productManager.deleteProduct(id);
-    console.log(producto)
-    if (producto == -1) {
+   
+    if (producto) {
+        emmitDeleteproduct(id);
         res.json({
             msg: 'Producto eliminado exitosamente'
         })
+
     } else {
         res.json({
             msg: "Producto no existe"
