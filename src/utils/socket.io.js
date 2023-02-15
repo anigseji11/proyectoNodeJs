@@ -16,16 +16,18 @@ const connectSocket = (httpServer) => {
    
 } ;
 
- const emmitDeleteproduct = (id) => {
-    io.emit('delete-product', {id});
+ const emitDeleteProduct = (id) => {
+    console.log('entra el emmitdelete')
+    console.log(id)
+    io.emit('delete-product', id);
 };
 
 const emmitAddproduct = (id, product) => {
-    io.emit('add-product', id, {product});
+    io.emit('add-product', id, product);
 };
 
 const emmitUpdateproduct = (product) => {
     io.emit('update-product', {product});
 };
 
-module.exports = {connectSocket, emmitDeleteproduct, emmitAddproduct, emmitUpdateproduct}; 
+module.exports = {connectSocket, emitDeleteProduct, emmitAddproduct, emmitUpdateproduct}; 

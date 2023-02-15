@@ -1,6 +1,6 @@
 const { Router } = require('express');
 
-const {emmitDeleteproduct, emmitAddproduct, emmitUpdateproduct} = require('../utils/socket.io');
+const {emitDeleteProduct, emmitAddproduct, emmitUpdateproduct} = require('../utils/socket.io');
 
 const router = Router();
 
@@ -41,7 +41,7 @@ router.post('/', async (req, res) => {
     let producto = req.body;
     try {
         const resp = await productManager.addProduct(producto.title, producto.description, producto.price, producto.thumbnail, producto.code, producto.stock, producto.status, producto.category);
-        console.log(resp)
+       
         if(resp !== 0){
             emmitAddproduct(resp, producto);
             res.json({
@@ -72,21 +72,23 @@ router.put('/', async (req, res) => {
 })
 
 router.delete('/:pid',async (req, res) => {
-    const id = parseInt(req.params.pid)
+    let productId = parseInt(req.params.pid)
 
-    let producto = await productManager.deleteProduct(id);
-   
-    if (producto) {
-        emmitDeleteproduct(id);
-        res.json({
-            msg: 'Producto eliminado exitosamente'
-        })
-
-    } else {
-        res.json({
-            msg: "Producto no existe"
-        })
-    }
+  
+    try {
+		let product = await productManager.deleteProduct(productId)
+       
+		emitDeleteProduct(productId);
+		res.json({
+			msg: 'Producto eliminado correctamente',
+			product,
+		})
+	} catch (error) {
+		res.status(404).json({
+			msg: `No fue posible eliminar el producto`,
+			error: error.message,
+		})
+	}
 })
 
 module.exports = router; 

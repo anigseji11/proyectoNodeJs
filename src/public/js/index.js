@@ -59,10 +59,9 @@ socket.on('init-products', ({products}) => {
 })
 
 
-socket.on('delete-products', ({id}) => {
-    const product = document.getElementById(id);
-    
-    product.remove();
+socket.on('delete-product', (id) => {
+    var row =  document.getElementById(id);
+   row.remove();
     
 })
 
@@ -89,8 +88,9 @@ socket.on('add-product', (id, product) => {
    
 })
 
-socket.on('update-product', (product) => { 
-    const products = document.getElementById(id);
-    products.innerHTML = `<li id="${product.id}">` + product.title + '</li>';
+socket.on('update-product', ({product}) => { 
+    const products = document.getElementById(product.id);
+    products.innerHTML = `<td>${product.id}</td><td>${product.title}</td>`;
+    
    
 })

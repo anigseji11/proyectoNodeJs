@@ -76,7 +76,7 @@ class ProductManager {
 
                 await writeFile(this.path, products);
                 console.log('EL PRODUCTO FUE INGRESADO EXITOSAMENTE')
-                return (products.length + 1);
+                return (products.length);
             }
         }else{
             console.log('FALTO INGRESAR UNO DE LOS VALORES')
@@ -125,18 +125,20 @@ class ProductManager {
     }
 
     deleteProduct = async(id) => {
-        const  {products} = await readFile(this.path)
-        var findIndexProduct = products.findIndex((producto) => producto.id === id);
-            
-            if(findIndexProduct != -1){
-               const newProducts = products.filter((product) => product.id != id);
-               await writeFile(this.path, newProducts);
-               emmitDeleteproduct(id);
-            return(true);
-  
-            }else{
-                return(false) 
-            }
+        const { products } = await readFile(this.path)
+		this.products = products
+		const findIndexProduct = this.products.findIndex(
+			(product) => product.id === id
+		)
+
+		if (findIndexProduct !== -1) {
+			const newProducts = this.products.filter((product) => product.id !== id)
+			await writeFile(this.path, newProducts)
+            return (id);
+			console.log('Eliminado correctamente')
+		} else {
+			throw new Error('No se encuentra un producto con ese id')
+		}
     }
 }
 const Product = new ProductManager(__dirname + '/assets/product.json');

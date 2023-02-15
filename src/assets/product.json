@@ -1,1 +1,26 @@
-{"products":[{"id":4,"title":"titulo8","description":"Descripcion","price":200,"code":45454545,"stock":1000,"status":true,"category":1},{"id":3,"title":"titulo676","description":"Descripcion","price":200,"code":355555,"stock":1000,"status":true,"category":1},{"id":4,"title":"titulo6","description":"Descripcion","price":200,"code":3444444,"stock":1000,"status":true,"category":1},{"id":5,"title":"titulo8999","description":"Descripcion","price":200,"code":5555,"stock":1000,"status":true,"category":1},{"id":6,"title":"dsfsdf","description":"Descripcion","price":200,"code":666666,"stock":1000,"status":true,"category":1}]}
+{
+    "products": [
+        {
+            "id": 1,
+            "title": "asd",
+            "description": "Descripcion",
+            "price": 200,
+            "thumbnail": "/ruta",
+            "code": 343434,
+            "stock": 1000,
+            "category": 1,
+            "status": true
+        },
+        {
+            "id": 3,
+            "title": "jkhjkhj",
+            "description": "Descripcion",
+            "price": 200,
+            "thumbnail": "/ruta",
+            "code": 677878,
+            "stock": 1000,
+            "status": true,
+            "category": 1
+        }
+    ]
+}
