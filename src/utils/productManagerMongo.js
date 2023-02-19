@@ -7,29 +7,25 @@ class productManagerBD{
     }
 
     getProducById = async (pid) => {
-        try {
-            const product = await productModel.find({_id: pid});
-            return product;
-         } catch (error) {
-             console.log(error)
-             return {msg: 'Error al crear producto'};
-         }
+            return await productModel.findById(pid)
     }
 
-    getProduct = async (page = 1, limit = 10, query = {}) => {
+    getProduct = async (page = 1, limit = 10, sort = '', query = {}) => {
         try {
-            const result = await productModel.paginate(query, {page, limit});
-            return  {
-                status:'success',
+            const result = await productModel.paginate(query, {page, limit, sort: {price: `${sort}`}});
+            //return result;
+            return {
+            status:'success',
             payload: result.docs,
+            limit: limit,
             totalPages: result.totalPages,
             prevPage: result.prevPage,
             nextPage: result.nextPage,
             page: result.page,
             hasPrevPage: result.hasPrevPage,
             hasNextPage: result.hasNextPage,
-            prevLink: (result.hasPrevPage) ? `localhost:8080/api/productsbd?page=${parseInt(page) - 1}&limit=1` : null,
-            nextLink: (result.hasNextPage) ? `localhost:8080/api/productsbd?page=${parseInt(page) + 1}&limit=1` : null,
+            prevLink: (result.hasPrevPage) ? `localhost:8080/api/productsbd?page=${parseInt(page) - 1}&limit=${limit}` : null,
+            nextLink: (result.hasNextPage) ? `localhost:8080/api/productsbd?page=${parseInt(page) + 1}&limit=${limit}` : null,
             };
     
         } catch (error) {
@@ -39,24 +35,16 @@ class productManagerBD{
     };
 
     addProduct = async (product) => {
-        try {
-           const newProduct = await productModel.create(product);
-           return {msg: 'Producto Creado', newProduct};
-        } catch (error) {
-            console.log(error)
-            return {msg: 'Error al crear producto'};
-        }
-    };
+        return await productModel.create(product);
+     };
 
     deleteProduct = async (id) => {
-        try {
-           const newProduct = await productModel.deleteOne({_id: id});
-           return {msg: 'Producto Eliminado correctamente', newProduct};
-        } catch (error) {
-            console.log(error)
-            return {msg: 'Error al eliminar producto'};
-        }
+        return await productModel.deleteOne({_id: id});
     };
+
+    updateProduct = async (id, newproduct) => {
+        return await ProductsModel.updateOne({ _id: id }, newProduct);
+    }
 }
 
 

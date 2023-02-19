@@ -1,7 +1,7 @@
 const { mongoose } = require('mongoose');
 const paginate = require('mongoose-paginate-v2')
 
-const productCollection = 'productCollection'
+const productCollection = 'products'
 
 const productShema = new mongoose.Schema({
     id: String,

@@ -7,18 +7,22 @@ const viewsRouter = require("./routes/views.router");
 const handlebars = require('express-handlebars');
 const {connectSocket} = require('./utils/socket.io');
 const { mongoose } = require('mongoose')
-
 const productModel = require('./models/product.model.js')
 
-mongoose.connect(
-    'mongodb+srv://admin:LkKlIdySPlvbG2gt@cluster10.puz4unz.mongodb.net/?retryWrites=true&w=majority'
-);
-
-
-
- 
 const server = express();
 
+//MONGOOSE
+mongoose.connect(
+    'mongodb+srv://admin:LkKlIdySPlvbG2gt@cluster10.puz4unz.mongodb.net/?retryWrites=true&w=majority',
+    (error) =>{
+        if(error){
+            console.log('Error de conexion. ', error)
+            process.exit();
+        }else{
+            console. log ( 'Conexión con base de datos exitosa')
+        }
+    }
+);
 
 //HANDLEBARS
 server.engine('handlebars', handlebars.engine());
@@ -32,25 +36,20 @@ server.use(express.static(__dirname + '/public'));
 server.use(express.json());
 server.use(express.urlencoded({extended: true}));
 
+
+//ROUTES
 server.use("/api/products", productRouter)
 server.use("/api/productsbd", productRouterBD)
 server.use("/api/carts", carsRouter)
 server.use("/api/cartsbd", carsRouterBD)
 server.use('/', viewsRouter)
 
-
-
-
-const ecommerce = productModel.find();
- 
-
-
+//SOCKET.IO
 const httpServer = server.listen(8080, () => { 
-    console.log('escuchando server en port 8080')
+    console.log('Servidor corriendo en el puerto 8080')
 });   
 
-
 //SOCKET IO
-
 connectSocket(httpServer);
 
+  
