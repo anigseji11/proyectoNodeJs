@@ -10,7 +10,7 @@ class productManagerBD{
             return await productModel.findById(pid)
     }
 
-    getProduct = async (page = 1, limit = 10, sort = '', query = {}) => {
+    getProduct = async (page = 1, limit = 2, sort = '', query = {}) => {
         try {
             const result = await productModel.paginate(query, {page, limit, sort: {price: `${sort}`}});
             //return result;
@@ -24,8 +24,10 @@ class productManagerBD{
             page: result.page,
             hasPrevPage: result.hasPrevPage,
             hasNextPage: result.hasNextPage,
-            prevLink: (result.hasPrevPage) ? `localhost:8080/api/productsbd?page=${parseInt(page) - 1}&limit=${limit}` : null,
-            nextLink: (result.hasNextPage) ? `localhost:8080/api/productsbd?page=${parseInt(page) + 1}&limit=${limit}` : null,
+            // prevLink: (result.hasPrevPage) ? `http://localhost:8080/api/productsbd?page=${parseInt(page) - 1}&limit=${limit}` : null,
+            prevLink: (result.hasPrevPage) ? `http://localhost:8080/products?page=${parseInt(page) - 1}&limit=${limit}` : null,
+            nextLink: (result.hasNextPage) ? `http://localhost:8080/products?page=${parseInt(page) + 1}&limit=${limit}` : null,
+            // nextLink: (result.hasNextPage) ? `http://localhost:8080/api/productsbd?page=${parseInt(page) + 1}&limit=${limit}` : null,
             };
     
         } catch (error) {
