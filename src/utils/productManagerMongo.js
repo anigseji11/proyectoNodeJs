@@ -10,7 +10,7 @@ class productManagerBD{
             return await productModel.findById(pid)
     }
 
-    getProduct = async (page = 1, limit = 2, sort = '', query = {}) => {
+    getProduct = async (page = 1, limit = 10, sort = '', query = {}) => {
         try {
             const result = await productModel.paginate(query, {page, limit, sort: {price: `${sort}`}});
             //return result;
