@@ -1,4 +1,5 @@
 const { Router, json } = require('express');
+const UserModel = require('../models/user.model')
 
 const router = Router();
 const productManager = require('../productManager')

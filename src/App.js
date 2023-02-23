@@ -4,14 +4,31 @@ const productRouterBD = require("./routes/productsBD.router");
 const carsRouter = require("./routes/carts.router");
 const carsRouterBD = require("./routes/cartsBD.router");
 const viewsRouter = require("./routes/views.router");
+const sessionRouter = require("./routes/session.router");
 const handlebars = require('express-handlebars');
 const {connectSocket} = require('./utils/socket.io');
 const { mongoose } = require('mongoose')
-const productModel = require('./models/product.model.js')
+
+const session = require('express-session');
+const mongoConnect = require('connect-mongo');
+
+
 
 const server = express();
 
+
+server.use(
+    session({
+        store: mongoConnect.create({
+            mongoUrl: 'mongodb+srv://admin:LkKlIdySPlvbG2gt@cluster10.puz4unz.mongodb.net/?retryWrites=true&w=majority',
+        }),
+        secret:'secret',
+        resave: true,
+        saveUninitialized:  true,
+}));
+
 //MONGOOSE
+
 mongoose.connect(
     'mongodb+srv://admin:LkKlIdySPlvbG2gt@cluster10.puz4unz.mongodb.net/?retryWrites=true&w=majority',
     (error) =>{
@@ -23,6 +40,8 @@ mongoose.connect(
         }
     }
 );
+
+
 
 //HANDLEBARS
 server.engine('handlebars', handlebars.engine());
@@ -42,6 +61,7 @@ server.use("/api/products", productRouter)
 server.use("/api/productsbd", productRouterBD)
 server.use("/api/carts", carsRouter)
 server.use("/api/cartsbd", carsRouterBD)
+server.use("/api/session", sessionRouter)
 server.use('/', viewsRouter)
 
 //SOCKET.IO
