@@ -8,9 +8,11 @@ const sessionRouter = require("./routes/session.router");
 const handlebars = require('express-handlebars');
 const {connectSocket} = require('./utils/socket.io');
 const { mongoose } = require('mongoose')
+const  passport = require('passport')
 
 const session = require('express-session');
 const mongoConnect = require('connect-mongo');
+const initPassport = require('./scripts/passport.config');
 
 
 
@@ -41,6 +43,9 @@ mongoose.connect(
     }
 );
 
+initPassport();
+server.use(passport.initialize());
+server.use(passport.session()); 
 
 
 //HANDLEBARS

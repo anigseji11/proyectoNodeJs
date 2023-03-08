@@ -27,13 +27,7 @@ const getUser = async (req, res) => {
 }
 
 const registerUser = async (req, res) => {
-    try {
-        const hash = await hashPassword(req.body.password);
-        const user = await UserModel.create({...req.body, password: hash});
-        res.send(user);
-    } catch (error) {
-        res.status(500).send('Error al crear usuario .' + error); 
-    }
+   res.send(req.user);
 }
 
 module.exports = {
