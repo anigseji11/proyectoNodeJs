@@ -1,4 +1,5 @@
 const UserModel = require('../models/user.model')
+const {hashPassword, comparePassword} = require('../utils/bcrypt')
 
 const getUser = async (req, res) => {
     const { email, password } = req.body;
@@ -13,8 +14,9 @@ const getUser = async (req, res) => {
         }
         req.session.user = userAdmin;
     }else{
-        const user = await UserModel.findOne({ email, password })
-        if (user) {
+        const user = await UserModel.findOne({ email })
+        const isValidPassword = await comparePassword(password, user.password)
+        if (user && isValidPassword) {
             req.session.user = {...user, role:'User'};
             res.send(user);
         } else {
@@ -26,7 +28,8 @@ const getUser = async (req, res) => {
 
 const registerUser = async (req, res) => {
     try {
-        const user = await UserModel.create(req.body);
+        const hash = await hashPassword(req.body.password);
+        const user = await UserModel.create({...req.body, password: hash});
         res.send(user);
     } catch (error) {
         res.status(500).send('Error al crear usuario .' + error); 
