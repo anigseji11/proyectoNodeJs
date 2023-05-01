@@ -1,5 +1,5 @@
 
-const productManager = require('../utils/productManagerMongo')
+const productManager = require('../dao/mongoManager/productManagerMongo')
 
 const getProductById = async (req, res) => {
     try {

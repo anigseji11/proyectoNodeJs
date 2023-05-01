@@ -69,7 +69,7 @@ class CartsManager {
 }
 
 
-const cartsManager = new CartsManager(__dirname + '/../assets/carts.json')
+const cartsManager = new CartsManager(__dirname + '/../../assets/carts.json')
 
 
 module.exports = cartsManager;

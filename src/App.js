@@ -13,8 +13,10 @@ const  passport = require('passport')
 const session = require('express-session');
 const mongoConnect = require('connect-mongo');
 const initPassport = require('./scripts/passport.config');
+const {PORT, MONGODBURL } = require('../src/config/config');
 
-
+console.log(PORT);
+console.log(MONGODBURL);
 
 const server = express();
 
@@ -22,7 +24,7 @@ const server = express();
 server.use(
     session({
         store: mongoConnect.create({
-            mongoUrl: 'mongodb+srv://admin:LkKlIdySPlvbG2gt@cluster10.puz4unz.mongodb.net/?retryWrites=true&w=majority',
+            mongoUrl: MONGODBURL,
         }),
         secret:'secret',
         resave: true,
@@ -32,7 +34,7 @@ server.use(
 //MONGOOSE
 
 mongoose.connect(
-    'mongodb+srv://admin:LkKlIdySPlvbG2gt@cluster10.puz4unz.mongodb.net/?retryWrites=true&w=majority',
+    MONGODBURL,
     (error) =>{
         if(error){
             console.log('Error de conexion. ', error)
@@ -70,8 +72,8 @@ server.use("/api/session", sessionRouter)
 server.use('/', viewsRouter)
 
 //SOCKET.IO
-const httpServer = server.listen(8080, () => { 
-    console.log('Servidor corriendo en el puerto 8080')
+const httpServer = server.listen(PORT, () => { 
+    console.log('Servidor corriendo en el puerto ' + PORT + '🔥')
 });   
 
 //SOCKET IO

@@ -1,9 +1,9 @@
 const { Router } = require('express');
 
 const router = Router();
-const cartsManager = require('../utils/cartsManager');
+const cartsManager = require('../dao/fsManager/cartsManager');
 
-const productManager = require('../productManager')
+const productManager = require('../dao/fsManager/ProductManager')
 
 router.post('/', async (req, res) => {
     

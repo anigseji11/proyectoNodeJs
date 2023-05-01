@@ -4,7 +4,7 @@ const {emitDeleteProduct, emmitAddproduct, emmitUpdateproduct} = require('../uti
 
 const router = Router();
 
-const productManager = require('../productManager')
+const productManager = require('../dao/fsManager/ProductManager')
 
 router.get("/", async (req, res) => {
 

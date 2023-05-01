@@ -1,5 +1,5 @@
-const cartsManager = require('../utils/cartsManagerMongo')
-const productsManager = require('../utils/productManagerMongo')
+const cartsManager = require('../dao/mongoManager/cartsManagerMongo')
+const productsManager = require('../dao/mongoManager/productManagerMongo')
 const { mapProductCart, calculateCartTotal } = require('../utils/calculateCartPrices')
 
 

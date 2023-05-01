@@ -134,14 +134,14 @@ class ProductManager {
 		if (findIndexProduct !== -1) {
 			const newProducts = this.products.filter((product) => product.id !== id)
 			await writeFile(this.path, newProducts)
+            console.log('Eliminado correctamente')
             return (id);
-			console.log('Eliminado correctamente')
 		} else {
 			throw new Error('No se encuentra un producto con ese id')
 		}
     }
 }
-const Product = new ProductManager(__dirname + '/assets/product.json');
+const Product = new ProductManager(__dirname + '/../../assets/product.json');
 module.exports = Product;
 
 // const ejecucion = async () => {

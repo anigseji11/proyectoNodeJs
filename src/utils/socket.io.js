@@ -1,6 +1,6 @@
 const socket = require('socket.io');
 let io;
-const productManager = require('../productManager');
+const productManager = require('../dao/mongoManager/productManagerMongo');
 
 
 const connectSocket = (httpServer) => {

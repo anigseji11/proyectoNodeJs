@@ -1,8 +1,10 @@
 const { Router } = require('express');
 const router = Router();
 const cartsController = require('../controller/carts.controller')
+const { userPermission } = require('../utils/middleware/isUser');
 
-router.post('/', cartsController.createCart);
+
+router.post('/', userPermission, cartsController.createCart);
 router.get("/:cid", cartsController.getCartById); 
 router.delete("/:cid/products/:pid", cartsController.deleteProductCart);
 router.delete("/:cid", cartsController.deleteAllProductCart);
